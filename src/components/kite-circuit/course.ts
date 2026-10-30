@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import type { GatePose, ObstacleKind, ObstaclePose } from './types';
 
 export const CAMERA_START_Z = 9.2;
+export const CAMERA_Y = 0;
 
 // The gates live in a fixed world while the camera travels into it. This keeps
 // the composition cinematic: the flight advances through the course instead of
@@ -16,9 +17,11 @@ export const ROAD_Y = -3.1;
 export const WATER_Y = ROAD_Y - 1.65;
 export const ROAD_WIDTH = 25;
 export const ROAD_LENGTH = 980;
-export const FRAME_WIDTH = 14.8;
-export const FRAME_HEIGHT = 10.9;
-export const FRAME_BEAM = 0.42;
+// Inner opening must clear the road deck at every rotation angle (inscribed radius > road half-width).
+export const FRAME_WIDTH = 31.2;
+export const FRAME_HEIGHT = 28.8;
+export const FRAME_BEAM = 1.2;
+export const GATE_Y = ROAD_Y + 1.6;
 export const KITE_HOME_Y = -1.62;
 export const KITE_LIMIT_X = 5.25;
 export const KITE_LIMIT_Y = 2.35;
@@ -79,30 +82,14 @@ export function obstacleMotionMultiplier(distance: number): number {
 }
 
 export function gatePose(relativeZ: number, sequence = 0): GatePose {
+  // Gates stay centred on the road at true size; only the starting tilt is staged by depth.
   const depth = -relativeZ;
-  // These are deliberately a staged composition, not three equal obstacles:
-  // a monumental foreground portal, a calmer secondary frame, then a distant
-  // vanishing-point marker.
-  const near = { distance: 46, x: -0.5, y: 1.1, tilt: 0.245, scale: 1.68 };
-  const middle = { distance: 106, x: 0.1, y: 0.78, tilt: -0.12, scale: 1.04 };
-  const far = { distance: 176, x: 0, y: 0.52, tilt: 0.03, scale: 0.58 };
-
-  const interpolate = (from: typeof near, to: typeof middle, t: number) => ({
-    x: THREE.MathUtils.lerp(from.x, to.x, t),
-    y: THREE.MathUtils.lerp(from.y, to.y, t),
-    tilt: THREE.MathUtils.lerp(from.tilt, to.tilt, t),
-    scale: THREE.MathUtils.lerp(from.scale, to.scale, t),
-  });
-
-  const stagedPose = depth <= middle.distance
-    ? interpolate(near, middle, THREE.MathUtils.clamp((depth - near.distance) / (middle.distance - near.distance), 0, 1))
-    : interpolate(middle, far, THREE.MathUtils.clamp((depth - middle.distance) / (far.distance - middle.distance), 0, 1));
-
+  const t = THREE.MathUtils.clamp((depth - 46) / (176 - 46), 0, 1);
   return {
-    x: stagedPose.x,
-    y: stagedPose.y,
-    tilt: stagedPose.tilt + (sequence - 1) * 0.08,
-    scale: stagedPose.scale,
+    x: 0,
+    y: GATE_Y,
+    tilt: THREE.MathUtils.lerp(0.245, 0.03, t) + (sequence - 1) * 0.08,
+    scale: 1,
   };
 }
 

@@ -74,6 +74,8 @@ function PaperPlaneAsset() {
         color: '#fbfbf9',
         roughness: 0.3,
         metalness: 0.08,
+        emissive: '#ffffff',
+        emissiveIntensity: 0.12,
         flatShading: true,
         side: THREE.DoubleSide,
       });

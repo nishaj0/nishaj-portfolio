@@ -35,13 +35,13 @@ export default function Gates({ flightDistance, gate, runState }: GatesProps) {
     shape.holes.push(opening);
 
     const frame = new THREE.ExtrudeGeometry(shape, {
-      depth: 0.52,
+      depth: 1.4,
       bevelEnabled: true,
       bevelSegments: 3,
-      bevelSize: 0.11,
-      bevelThickness: 0.12,
+      bevelSize: 0.16,
+      bevelThickness: 0.16,
     });
-    frame.translate(0, 0, -0.26);
+    frame.translate(0, 0, -0.7);
     frame.computeVertexNormals();
     return frame;
   }, []);
@@ -65,7 +65,7 @@ export default function Gates({ flightDistance, gate, runState }: GatesProps) {
   return (
     <group ref={group} position={[initialPose.x, initialPose.y, gate.z]} rotation={[0, 0, initialPose.tilt]}>
       <mesh geometry={geometry} castShadow>
-        <meshPhysicalMaterial color="#ffffff" roughness={0.08} metalness={0.24} emissive="#ffffff" emissiveIntensity={1.12} clearcoat={0.58} clearcoatRoughness={0.08} toneMapped={false} />
+        <meshStandardMaterial color="#f4f4f2" roughness={0.62} metalness={0} emissive="#ffffff" emissiveIntensity={0.06} />
       </mesh>
     </group>
   );

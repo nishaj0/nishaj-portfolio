@@ -9,6 +9,24 @@ type GameAudioOptions = {
   runState: RunState;
 };
 
+function playCrash() {
+  const context = new AudioContext();
+  const length = Math.floor(context.sampleRate * 0.35);
+  const buffer = context.createBuffer(1, length, context.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / length) ** 3;
+  const noise = context.createBufferSource();
+  noise.buffer = buffer;
+  const filter = context.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = 1400;
+  const gain = context.createGain();
+  gain.gain.value = 0.35;
+  noise.connect(filter).connect(gain).connect(context.destination);
+  noise.onended = () => void context.close();
+  noise.start();
+}
+
 function restart(audio: HTMLAudioElement | null) {
   if (!audio) return;
 
@@ -59,6 +77,10 @@ export default function useGameAudio({ boostActive, enabled, runState }: GameAud
     } else {
       music.current.pause();
     }
+  }, [enabled, runState]);
+
+  useEffect(() => {
+    if (runState === 'crashed' && enabled && hasStarted.current) playCrash();
   }, [enabled, runState]);
 
   useEffect(() => {

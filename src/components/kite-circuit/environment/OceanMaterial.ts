@@ -42,6 +42,8 @@ export const OCEAN_FRAGMENT_SHADER = `
     vec3 horizon = vec3(0.018, 0.021, 0.026) * pow(1.0 - max(viewDirection.y, 0.0), 2.0);
     vec3 ocean = vec3(0.00005, 0.00007, 0.0001) + horizon;
     ocean += vec3(specular * 0.22 + railGlint * 0.045 + fresnel * 0.035 + pow(fineRipples, 16.0) * 0.008);
+    float fogDistance = length(cameraPosition - vWorldPosition) * 0.0075;
+    ocean = mix(ocean, vec3(0.042, 0.045, 0.051), 1.0 - exp(-fogDistance * fogDistance));
     gl_FragColor = vec4(ocean, 1.0);
   }
 `;

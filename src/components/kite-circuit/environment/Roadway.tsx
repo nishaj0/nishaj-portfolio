@@ -24,21 +24,21 @@ export default function Roadway({ flightDistance }: RoadwayProps) {
       </mesh>
       <mesh position={[0, ROAD_Y, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <planeGeometry args={[ROAD_WIDTH, ROAD_LENGTH]} />
-        <meshPhysicalMaterial color="#010203" roughness={0.25} metalness={0.32} clearcoat={0.72} clearcoatRoughness={0.16} reflectivity={0.55} />
+        <meshPhysicalMaterial color="#050506" roughness={0.12} metalness={0} clearcoat={1} clearcoatRoughness={0.06} />
       </mesh>
 
       <mesh position={[0, ROAD_Y + 0.045, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[0.085, ROAD_LENGTH]} />
-        <meshBasicMaterial color="#ffffff" toneMapped={false} />
+        <meshBasicMaterial color="#8d8f93" />
       </mesh>
 
       {[-1, 1].map((side) => (
-        <group key={side} position={[side * (ROAD_WIDTH / 2 - 0.23), ROAD_Y + 0.1, 0]}>
+        <group key={side} position={[side * (ROAD_WIDTH / 2 - 0.4), ROAD_Y + 0.15, 0]}>
           <mesh>
-            <boxGeometry args={[0.48, 0.19, ROAD_LENGTH]} />
-            <meshPhysicalMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={1.35} roughness={0.06} metalness={0.18} clearcoat={0.5} clearcoatRoughness={0.08} toneMapped={false} />
+            <boxGeometry args={[0.8, 0.3, ROAD_LENGTH]} />
+            <meshStandardMaterial color="#f4f4f2" emissive="#ffffff" emissiveIntensity={0.35} roughness={0.5} metalness={0} />
           </mesh>
-          <mesh position={[side * 0.25, -0.095, 0]}>
+          <mesh position={[side * 0.42, -0.15, 0]}>
             <boxGeometry args={[0.24, 0.13, ROAD_LENGTH]} />
             <meshStandardMaterial color="#010102" roughness={0.8} />
           </mesh>

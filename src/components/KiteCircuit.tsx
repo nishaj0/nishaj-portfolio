@@ -111,6 +111,10 @@ export default function KiteCircuit() {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      if (!event.shiftKey) {
+        nitro.current.held = false;
+        nitro.current.locked = false;
+      }
       if (event.key === 'Escape') {
         if (runStateRef.current === 'running') updateRunState('paused');
         else if (runStateRef.current === 'paused') updateRunState('running');
@@ -131,10 +135,9 @@ export default function KiteCircuit() {
     };
     const onKeyUp = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
-      if (key === 'shift') {
+      if (key === 'shift' || !event.shiftKey) {
         nitro.current.held = false;
         nitro.current.locked = false;
-        return;
       }
       pressedKeys.current.delete(key);
     };
@@ -234,7 +237,7 @@ export default function KiteCircuit() {
       onPointerUp={() => { pointerDown.current = false; }}
       onPointerCancel={() => { pointerDown.current = false; }}
     >
-      <Canvas dpr={[1, 1.5]} camera={{ position: [0, 0.46, 9.2], fov: 42 }} gl={{ antialias: true }}>
+      <Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 9.2], fov: 42 }} gl={{ antialias: true }}>
         <KiteCircuitScene runId={runId} runState={runStateRef} flightDistance={flightDistance} horizontalLimit={horizontalLimit} player={player} target={target} nitro={nitro} onBoostChange={setBoostActive} onCrash={onCrash} onNitroChange={setNitroAmount} reducedMotion={reducedMotion} />
       </Canvas>
 

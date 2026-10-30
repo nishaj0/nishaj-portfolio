@@ -55,6 +55,7 @@ export default function CloudBanks({ flightDistance, nitro, reducedMotion, runSt
       <Clouds limit={180} range={180} frustumCulled={false}>
         <CloudBank side={-1} reducedMotion={reducedMotion} />
         <CloudBank side={1} reducedMotion={reducedMotion} />
+        <Cloud position={[0, WATER_Y + 1.6, -150]} bounds={[34, 1.6, 12]} segments={36} volume={6} smallestVolume={0.5} growth={6} speed={reducedMotion ? 0 : 0.05} fade={60} opacity={0.45} color="#d8dade" seed={97} />
       </Clouds>
     </group>
   );

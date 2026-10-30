@@ -1,10 +1,11 @@
 'use client';
 
 import { Bloom, EffectComposer, Vignette } from '@react-three/postprocessing';
+import { Environment, Lightformer } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Suspense, useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
-import { CAMERA_START_Z, flightSpeed, GATE_STARTS, KITE_HOME_Y, NITRO_CHARGE_PER_SECOND, NITRO_DRAIN_PER_SECOND, NITRO_MAX, OBSTACLE_KINDS, OBSTACLE_STARTS } from './course';
+import { CAMERA_START_Z, CAMERA_Y, flightSpeed, GATE_STARTS, KITE_HOME_Y, NITRO_CHARGE_PER_SECOND, NITRO_DRAIN_PER_SECOND, NITRO_MAX, OBSTACLE_KINDS, OBSTACLE_STARTS } from './course';
 import BoostTrail from './environment/BoostTrail';
 import CloudBanks from './environment/CloudBanks';
 import CollisionSystem from './environment/CollisionSystem';
@@ -36,7 +37,7 @@ function CinematicCamera({ flightDistance, nitro, onBoostChange, onNitroChange, 
   const lastReportedBoost = useRef(false);
 
   useEffect(() => {
-    camera.position.set(0, 0.46, CAMERA_START_Z);
+    camera.position.set(0, CAMERA_Y, CAMERA_START_Z);
     if (camera instanceof THREE.PerspectiveCamera) camera.fov = 42;
     camera.updateProjectionMatrix();
   }, [camera]);
@@ -77,8 +78,8 @@ function CinematicCamera({ flightDistance, nitro, onBoostChange, onNitroChange, 
 
     const cameraZ = CAMERA_START_Z - flightDistance.current;
     const flightBob = reducedMotion ? 0 : Math.sin(clock.elapsedTime * 2.4) * 0.016;
-    camera.position.set(0, 0.46 + flightBob, cameraZ);
-    camera.lookAt(0, -1.48, cameraZ - 68);
+    camera.position.set(0, CAMERA_Y + flightBob, cameraZ);
+    camera.lookAt(0, -1.75, cameraZ - 68);
   });
 
   return null;
@@ -101,7 +102,7 @@ function RendererSettings() {
 function CinematicFinish({ reducedMotion }: Pick<FlightSceneProps, 'reducedMotion'>) {
   return (
     <EffectComposer enableNormalPass={false} multisampling={0}>
-      <Bloom luminanceThreshold={0.72} luminanceSmoothing={0.65} intensity={reducedMotion ? 0 : 0.38} height={420} />
+      <Bloom luminanceThreshold={0.9} luminanceSmoothing={0.4} intensity={reducedMotion ? 0 : 0.22} height={420} />
       <Vignette offset={0.36} darkness={0.34} />
     </EffectComposer>
   );
@@ -133,7 +134,16 @@ export default function KiteCircuitScene({ flightDistance, horizontalLimit, nitr
       <CinematicCamera flightDistance={flightDistance} nitro={nitro} onBoostChange={onBoostChange} onNitroChange={onNitroChange} reducedMotion={reducedMotion} runState={runState} />
       <RendererSettings />
       <color attach="background" args={['#000000']} />
+      <fogExp2 attach="fog" args={['#3a3c40', 0.0075]} />
       <Sky />
+      {/* Procedural studio reflections (no HDR download) so metal reads as silver, not dark grey. */}
+      <Environment resolution={256} frames={1} environmentIntensity={0.12}>
+        <color attach="background" args={['#2c2e33']} />
+        <Lightformer form="rect" intensity={2.4} color="#ffffff" position={[0, 3, 12]} rotation-y={Math.PI} scale={[22, 5, 1]} />
+        <Lightformer form="rect" intensity={3} color="#ffffff" position={[0, 6, -8]} scale={[18, 3, 1]} />
+        <Lightformer form="rect" intensity={1.6} color="#ffffff" position={[-10, 2, 4]} rotation-y={Math.PI / 2} scale={[14, 4, 1]} />
+        <Lightformer form="rect" intensity={1.6} color="#ffffff" position={[10, 2, 4]} rotation-y={-Math.PI / 2} scale={[14, 4, 1]} />
+      </Environment>
       <hemisphereLight args={['#cdd4dc', '#000000', 0.38]} />
       <directionalLight position={[-8, 13, 8]} intensity={2.2} color="#ffffff" />
       <pointLight position={[12, 1, -30]} intensity={4.2} distance={74} color="#ffffff" />

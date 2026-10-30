@@ -1,6 +1,6 @@
 'use client';
 
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import {
@@ -30,15 +30,12 @@ type ObstaclesProps = {
 };
 
 const obstacleMaterial = {
-  color: '#8a9098',
+  color: '#f4f6f9',
   metalness: 1.0,
-  roughness: 0.18,
-  emissive: '#1a1f26',
-  emissiveIntensity: 0.3,
+  roughness: 0.14,
   clearcoat: 1.0,
-  clearcoatRoughness: 0.08,
-  envMapIntensity: 1.4,
-  toneMapped: false,
+  clearcoatRoughness: 0.05,
+  envMapIntensity: 2.2,
 };
 
 function deterministicKind(id: number, recycleCount: number): ObstacleKind {
@@ -56,6 +53,7 @@ function Obstacle({
   runState: React.MutableRefObject<RunState>;
 }) {
   const group = useRef<THREE.Group>(null);
+  const envMap = useThree((state) => state.scene.environment);
   const orbiterChildren = useRef<THREE.Mesh[]>([]);
   const recycleCount = useRef(0);
 
@@ -122,7 +120,7 @@ function Obstacle({
             geometry={geometry}
             castShadow
           >
-            <meshPhysicalMaterial {...obstacleMaterial} />
+            <meshPhysicalMaterial {...obstacleMaterial} envMap={envMap} />
           </mesh>
         ))}
       </group>
@@ -132,7 +130,7 @@ function Obstacle({
   return (
     <group ref={group} position={[initialPose.x, initialPose.y, obstacle.z]}>
       <mesh geometry={geometry} castShadow>
-        <meshPhysicalMaterial {...obstacleMaterial} />
+        <meshPhysicalMaterial {...obstacleMaterial} envMap={envMap} />
       </mesh>
     </group>
   );
