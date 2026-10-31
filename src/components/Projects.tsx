@@ -55,11 +55,14 @@ function ProjectCard({
         <div className="relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
             <motion.h3
-              className="text-3xl md:text-5xl font-bold mb-4 md:mb-0"
+              className="flex items-center gap-4 text-3xl md:text-5xl font-bold mb-4 md:mb-0"
               initial={{ x: -50 }}
               animate={isInView ? { x: 0 } : { x: -50 }}
               transition={{ duration: 0.6, delay: 0.2 + index * 0.2 }}
             >
+              {project.logo && (
+                <Image src={project.logo} alt="" width={56} height={56} className="h-10 w-10 shrink-0 rounded-lg bg-white object-contain p-1 md:h-14 md:w-14" />
+              )}
               {project.title}
             </motion.h3>
             <motion.span
@@ -183,10 +186,11 @@ function ProjectPreview({ project, onClose }: { project: Project; onClose: () =>
 
         <div className="p-5 sm:p-7">
           <p className="mb-2 text-xs font-bold tracking-[0.08em]">PROJECT PREVIEW</p>
-          <h2 id="project-preview-title" className="max-w-[14ch] text-3xl font-bold tracking-tight sm:text-5xl">
+          <h2 id="project-preview-title" className="flex items-center gap-3 text-3xl font-bold tracking-tight sm:text-5xl">
+            {project.logo && <Image src={project.logo} alt="" width={48} height={48} className="h-10 w-10 shrink-0 rounded-lg border border-black object-contain p-1 sm:h-12 sm:w-12" />}
             {project.title}
           </h2>
-          <p className="mt-3 max-w-[65ch] text-base leading-relaxed text-gray-700 sm:text-lg">{project.description}</p>
+          <p className="mt-3 max-w-[65ch] text-base leading-relaxed text-gray-700 sm:text-lg">{project.fullDescription}</p>
 
           <div className="mt-5 border-t-2 border-black pt-4">
             <h3 className="text-base font-bold">Stack</h3>
