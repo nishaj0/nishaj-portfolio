@@ -24,6 +24,18 @@ export const projects = [
     }
   },
   {
+    title: 'Little Lodgers',
+    slug: 'little-lodgers',
+    description: 'A cozy room-arranging logic puzzle for Android where every tenant has wishes.',
+    fullDescription: 'A cozy room-arranging logic puzzle for Android. Each tenant has wishes, like the lamp by the bed or the cat\'s walk to its bowl, and you move their furniture until every wish comes true and their window lights up. Four buildings and 80 rooms, plus a daily room, mail from returning tenants and a flat you decorate with their gifts. Built in Godot 4.',
+    tags: ['Godot 4', 'GDScript', 'Android', 'AdMob', 'Astro'],
+    logo: '/projects/little-lodgers-logo.svg',
+    image: '/projects/little-lodgers.png',
+    links: {
+      demo: 'https://little-lodgers.zyrodev.in',
+    }
+  },
+  {
     title: 'Cozy Hallway',
     slug: 'cozy-hallway',
     description: 'A multiplayer lofi hangout where every friend gets a room off a shared hallway.',
