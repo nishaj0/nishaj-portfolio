@@ -1,5 +1,16 @@
 export const projects = [
   {
+    title: 'Claude for Everything',
+    slug: 'claude-for-everything',
+    description: 'Free Claude skills, plugins and MCP servers, organised by the task you need done.',
+    fullDescription: 'A directory of free Claude skills, plugins and MCP servers, organised by the task you need done, from video and design to dev and writing. Built as a fast static Astro site.',
+    tags: ['Astro', 'TypeScript'],
+    image: '/project-stock.jpg',
+    links: {
+      demo: 'https://cfe.zyrodev.in',
+    }
+  },
+  {
     title: 'Ryze',
     slug: 'ryze',
     description: 'A gym log and AI coach for lifters who train in 12-week arcs.',
